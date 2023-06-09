@@ -1,20 +1,44 @@
 import { NotFound } from '@/components/screens/not-found/not-found.component';
 
 import { ROUTES } from './routes.data';
+import { Layout } from '@/components/layout/layout.component';
+import { $M } from '../mquery/mquery.lib';
 
 export class Router {
-    #routes
-    #currentRoute
+    #routes = ROUTES
+    #currentRoute = null
+    #layout = null
+    #title = null
 
     constructor() {
-        this.#routes = ROUTES
-        this.#currentRoute = null
+        window.addEventListener('popstate', () => {
+            this.#handleRouteChange()
+        })
 
         this.#handleRouteChange()
+        this.#handleLinks()
     }
 
     getCurrentPath() {
         return window.location.pathname
+    }
+
+    navigate(path) {
+        if(path !== this.getCurrentPath()) {
+            window.history.pushState({}, '', path)
+            this.#handleRouteChange()
+        }
+    }
+
+    #handleLinks() {
+        document.addEventListener('click', event => {
+            const target = event.target.closest('a')
+            
+            if(target){
+                event.preventDefault()
+                this.navigate(target.href)
+            }
+        })
     }
 
     #handleRouteChange() {
@@ -28,11 +52,21 @@ export class Router {
         }
 
         this.#currentRoute = route
-        this.render()
+        this.#render()
     }
 
-    render() {
-        const component = new this.#currentRoute.component()
-        document.getElementById('app').innerHTML = component.render()
+    #render() {
+        const component = new this.#currentRoute.component().render()
+
+        if(!this.#layout){
+            this.#layout = new Layout({
+                router: this,
+                children: component
+            }).render()
+
+            $M('#app').append(this.#layout)
+        }else{
+            $M('#content').html('').append(component)
+        }
     }
 }
