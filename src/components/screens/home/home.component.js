@@ -3,7 +3,7 @@ import renderService from "@/core/services/render.service"
 
 import template from './home.template.html'
 import styles from './home.module.scss'
-import {$M} from '@/core/mquery/mquery.lib'
+import { CardInfo } from "./card-info/card-info.component"
 
 export class Home extends BaseScreen {
     constructor() {
@@ -11,9 +11,7 @@ export class Home extends BaseScreen {
     }
 
     render() {
-        const element = renderService.htmlToElement(template, [], styles)
-
-        $M(element).find('h1').css('color', 'pink')
+        const element = renderService.htmlToElement(template, [CardInfo], styles)
 
         return element
     }

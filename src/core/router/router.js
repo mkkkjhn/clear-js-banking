@@ -1,5 +1,5 @@
 import { NotFound } from '@/components/screens/not-found/not-found.component';
-
+import { Auth } from '@/components/screens/auth/auth.component';
 import { ROUTES } from './routes.data';
 import { Layout } from '@/components/layout/layout.component';
 import { $M } from '../mquery/mquery.lib';
