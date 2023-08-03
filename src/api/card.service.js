@@ -1,23 +1,23 @@
-import { memaQuery } from "@/core/mema-query/mema-query.lib"
-import { NotificationService } from "@/core/services/notification.service"
-import { Store } from "@/core/store/store"
+import { memaQuery } from '@/core/mema-query/mema-query.lib'
+import { NotificationService } from '@/core/services/notification.service'
+import { Store } from '@/core/store/store'
 
 export class CardService {
-    #BASE_URL = '/cards'
+	#BASE_URL = '/cards'
 
-    constructor(){
-        this.store = Store.getInstance()
-        this.notificationService = new NotificationService()
-    }
+	constructor() {
+		this.store = Store.getInstance().state
+		this.notificationService = new NotificationService()
+	}
 
-    byUser(onSuccess) {
-        return memaQuery({
-            path: `${this.#BASE_URL}/by-user`,
-            onSuccess
-        })
-    }
+	byUser(onSuccess) {
+		return memaQuery({
+			path: `${this.#BASE_URL}/by-user`,
+			onSuccess
+		})
+	}
 
-    /**
+	/**
 	 * Updates the user's balance with the specified amount and type.
 	 *
 	 * @param {number} amount - The amount to be added or withdrawn from the user's balance.
@@ -25,22 +25,22 @@ export class CardService {
 	 * @param {function} onSuccess - The callback function to be executed when the balance update is successful.
 	 * @returns {Promise} A Promise object that resolves to the response from the API.
 	 */
-    updateBalance(amount, type, onSuccess) {
-        return memaQuery({
-            path: `${this.#BASE_URL}/balance/${type}`,
-            method: 'PATCH',
-            body: { amount: +amount },
-            onSuccess: () => {
-                this.notificationService.show(
-                    'success',
-                    'Balance successfully changed!'
-                )
-                onSuccess()
-            }
-        })
-    }
+	updateBalance(amount, type, onSuccess) {
+		return memaQuery({
+			path: `${this.#BASE_URL}/balance/${type}`,
+			method: 'PATCH',
+			body: { amount: +amount },
+			onSuccess: () => {
+				this.notificationService.show(
+					'success',
+					'Balance successfully changed!'
+				)
+				onSuccess()
+			}
+		})
+	}
 
-    /**
+	/**
 	 * Transfers money between two card numbers.
 	 *
 	 * @function
@@ -50,22 +50,22 @@ export class CardService {
 	 * @param {Function} onSuccess - The callback function to be executed upon successful transfer.
 	 * @returns {Promise} A promise that resolves with the redQuery response.
 	 */
-    transfer({ amount, toCardNumber }, onSuccess) {
-        return memaQuery({
-            path: `${this.#BASE_URL}/transfer-money`,
-            method: 'PATCH',
-            body: {
-                amount: +amount,
-                fromCardNumber: this.store.user.card.number,
-                toCardNumber
-            },
-            onSuccess: () => {
-                this.notificationService.show(
-                    'success',
-                    'Transfer successfully completed!'
-                )
-                onSuccess()
-            }
-        })
-    }
+	transfer({ amount, toCardNumber }, onSuccess) {
+		return memaQuery({
+			path: `${this.#BASE_URL}/transfer-money`,
+			method: 'PATCH',
+			body: {
+				amount: +amount,
+				fromCardNumber: this.store.user.card.number,
+				toCardNumber
+			},
+			onSuccess: () => {
+				this.notificationService.show(
+					'success',
+					'Transfer successfully completed!'
+				)
+				onSuccess()
+			}
+		})
+	}
 }
