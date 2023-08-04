@@ -1,5 +1,4 @@
 import { NotFound } from '@/components/screens/not-found/not-found.component';
-import { Auth } from '@/components/screens/auth/auth.component';
 import { ROUTES } from './routes.data';
 import { Layout } from '@/components/layout/layout.component';
 import { $M } from '../mquery/mquery.lib';
@@ -8,7 +7,6 @@ export class Router {
     #routes = ROUTES
     #currentRoute = null
     #layout = null
-    #title = null
 
     constructor() {
         window.addEventListener('popstate', () => {
@@ -64,7 +62,7 @@ export class Router {
                 children: component
             }).render()
 
-            $M('#app').append(this.#layout)
+            $M('#app').html('').append(this.#layout)
         }else{
             $M('#content').html('').append(component)
         }
