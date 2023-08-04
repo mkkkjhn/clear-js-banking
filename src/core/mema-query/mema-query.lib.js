@@ -72,7 +72,7 @@ export async function memaQuery({
 	} catch (errorData) {
 		const errorMessage = extractErrorMessage(errorData)
 
-		if (errorMessage) {
+		if (onError) {
 			onError(errorMessage)
 		}
 	} finally {
